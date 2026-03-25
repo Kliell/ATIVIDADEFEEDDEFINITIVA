@@ -75,7 +75,6 @@ export default function Feed(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
       <View style={styles.topBar}>
         <Text style={styles.logo}>MyFeed</Text>
 
@@ -84,7 +83,6 @@ export default function Feed(): JSX.Element {
         </TouchableOpacity>
       </View>
 
-      {/* LISTA */}
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
@@ -92,7 +90,6 @@ export default function Feed(): JSX.Element {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* MODAL */}
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Novo Post</Text>
