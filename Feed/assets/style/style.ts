@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
 
-  /* HEADER */
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -21,7 +20,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  /* POST */
   card: {
     backgroundColor: "#fff",
     marginBottom: 15,
@@ -55,7 +53,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 
-  /* MODAL */
   modalContainer: {
     flex: 1,
     padding: 20,
