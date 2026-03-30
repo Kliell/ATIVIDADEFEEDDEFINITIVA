@@ -4,7 +4,6 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Modal,
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,7 +15,7 @@ import useTheme from "@/hooks/useTheme";
 
 export default function Feed() {
   const posts = useQuery(api.posts.getPosts);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [, setModalVisible] = useState(false);
   const styles = createHomeStyles(colors); 
 
   const renderItem = ({ item }: any) => (
