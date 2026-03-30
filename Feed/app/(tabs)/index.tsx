@@ -5,56 +5,21 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  TextInput,
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "@/assets/style/style";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import {createHomeStyles} from "@/assets/style/style";
+import useTheme from "@/hooks/useTheme";
 
-type Post = {
-  id: string;
-  user: string;
-  content: string;
-  image: string;
-};
 
-export default function Feed(): JSX.Element {
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: "1",
-      user: "João",
-      content: "Curtindo o dia !!",
-      image: "https://picsum.photos/400/300",
-    },
-    {
-      id: "2",
-      user: "Maria",
-      content: "Viagem incrível!",
-      image: "https://picsum.photos/401/300",
-    },
-  ]);
-
+export default function Feed() {
+  const posts = useQuery(api.posts.getPosts);
   const [modalVisible, setModalVisible] = useState(false);
-  const [newPost, setNewPost] = useState("");
-  const [newImage, setNewImage] = useState("");
+  const styles = createHomeStyles(colors); 
 
-  const addPost = () => {
-    if (!newPost) return;
-
-    const post: Post = {
-      id: Date.now().toString(),
-      user: "Você",
-      content: newPost,
-      image: newImage || "https://picsum.photos/500/300",
-    };
-
-    setPosts([post, ...posts]);
-    setNewPost("");
-    setNewImage("");
-    setModalVisible(false);
-  };
-
-  const renderItem = ({ item }: { item: Post }) => (
+  const renderItem = ({ item }: any) => (
     <View style={styles.card}>
       <View style={styles.headerPost}>
         <Ionicons name="person-circle" size={32} color="#555" />
@@ -73,6 +38,14 @@ export default function Feed(): JSX.Element {
     </View>
   );
 
+  if (!posts) {
+    return (
+      <View style={styles.container}>
+        <Text>Carregando...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -85,65 +58,75 @@ export default function Feed(): JSX.Element {
 
       <FlatList
         data={posts}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: any) => item._id}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
-
+{/* 
       <Modal visible={modalVisible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Novo Post</Text>
-
-          <TextInput
-            placeholder="O que você está pensando?"
-            value={newPost}
-            onChangeText={setNewPost}
-            style={styles.input}
-          />
-
-          <TextInput
-            placeholder="URL da imagem (opcional)"
-            value={newImage}
-            onChangeText={setNewImage}
-            style={styles.input}
-          />
-
-          <TouchableOpacity style={styles.button} onPress={addPost}>
-            <Text style={styles.buttonText}>Publicar</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <Text style={styles.cancel}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+        <PostModal onClose={() => setModalVisible(false)} />
+      </Modal> */}
     </View>
   );
 }
 
-
-
-//import {
+// import {
 //   View,
 //   Text,
 //   FlatList,
 //   Image,
 //   TouchableOpacity,
+//   Modal,
+//   TextInput,
 // } from "react-native";
 // import { useState } from "react";
 // import { Ionicons } from "@expo/vector-icons";
 // import styles from "@/assets/style/style";
 
-// import { useQuery } from "convex/react";
-// import { api } from "@/convex/_generated/api";
-
-// import AddPost from "@/components/AddPost";
+// type Post = {
+//   id: string;
+//   user: string;
+//   content: string;
+//   image: string;
+// };
 
 // export default function Feed(): JSX.Element {
-//   const posts = useQuery(api.posts.getPosts) || [];
-//   const [modalVisible, setModalVisible] = useState(false);
+//   const [posts, setPosts] = useState<Post[]>([
+//     {
+//       id: "1",
+//       user: "João",
+//       content: "Curtindo o dia !!",
+//       image: "https://picsum.photos/400/300",
+//     },
+//     {
+//       id: "2",
+//       user: "Maria",
+//       content: "Viagem incrível!",
+//       image: "https://picsum.photos/401/300",
+//     },
+//   ]);
 
-//   const renderItem = ({ item }: any) => (
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [newPost, setNewPost] = useState("");
+//   const [newImage, setNewImage] = useState("");
+
+//   const addPost = () => {
+//     if (!newPost) return;
+
+//     const post: Post = {
+//       id: Date.now().toString(),
+//       user: "Você",
+//       content: newPost,
+//       image: newImage || "https://picsum.photos/500/300",
+//     };
+
+//     setPosts([post, ...posts]);
+//     setNewPost("");
+//     setNewImage("");
+//     setModalVisible(false);
+//   };
+
+//   const renderItem = ({ item }: { item: Post }) => (
 //     <View style={styles.card}>
 //       <View style={styles.headerPost}>
 //         <Ionicons name="person-circle" size={32} color="#555" />
@@ -174,17 +157,38 @@ export default function Feed(): JSX.Element {
 
 //       <FlatList
 //         data={posts}
-//         keyExtractor={(item) => item._id}
+//         keyExtractor={(item) => item.id}
 //         renderItem={renderItem}
 //         showsVerticalScrollIndicator={false}
 //       />
 
-//       <AddPost
-//         visible={modalVisible}
-//         onClose={() => setModalVisible(false)}
-//       />
+//       <Modal visible={modalVisible} animationType="slide">
+//         <View style={styles.modalContainer}>
+//           <Text style={styles.modalTitle}>Novo Post</Text>
+
+//           <TextInput
+//             placeholder="O que você está pensando?"
+//             value={newPost}
+//             onChangeText={setNewPost}
+//             style={styles.input}
+//           />
+
+//           <TextInput
+//             placeholder="URL da imagem (opcional)"
+//             value={newImage}
+//             onChangeText={setNewImage}
+//             style={styles.input}
+//           />
+
+//           <TouchableOpacity style={styles.button} onPress={addPost}>
+//             <Text style={styles.buttonText}>Publicar</Text>
+//           </TouchableOpacity>
+
+//           <TouchableOpacity onPress={() => setModalVisible(false)}>
+//             <Text style={styles.cancel}>Cancelar</Text>
+//           </TouchableOpacity>
+//         </View>
+//       </Modal>
 //     </View>
 //   );
 // }
-
-

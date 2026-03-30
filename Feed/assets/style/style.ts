@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
+import {ColorScheme}  from "@/hooks/useTheme"; 
 
+export const createHomeStyles =(colors: ColorScheme) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -93,4 +95,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+return styles;
+}
