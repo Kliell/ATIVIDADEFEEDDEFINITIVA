@@ -5,7 +5,6 @@ export const getPosts = query({
   handler: async (ctx) => {
     return await ctx.db
       .query("posts")
-      .withIndex("by_creation")
       .order("desc")
       .collect();
   },

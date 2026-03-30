@@ -18,6 +18,6 @@ export default defineSchema({
     user: v.string(),
     content: v.string(),
     image: v.string(),
-  }).index("by_creation", ["_creationTime"]),
+  })
 });
 
