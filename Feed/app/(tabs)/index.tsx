@@ -4,19 +4,44 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Modal,
+  TextInput
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react"; // Adicionado useMutation
 import { api } from "@/convex/_generated/api";
-import {createHomeStyles} from "@/assets/style/style";
-import useTheme from "@/hooks/useTheme";
-
+import { createHomeStyles } from "@/assets/style/style";
+import colors from "@/hooks/useTheme";
 
 export default function Feed() {
   const posts = useQuery(api.posts.getPosts);
-  const [, setModalVisible] = useState(false);
-  const styles = createHomeStyles(colors); 
+  const createPost = useMutation(api.posts.createPost); // Certifique-se que essa mutation existe no seu api.ts
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newPost, setNewPost] = useState("");
+  const [newImage, setNewImage] = useState("");
+
+  const styles = createHomeStyles(colors);
+
+  // Função para salvar o post no Convex
+  const handleAddPost = async () => {
+    if (!newPost) return;
+
+    try {
+      await createPost({
+        user: "Você", // Ou o nome do usuário logado
+        content: newPost,
+        image: newImage || "https://picsum.photos/500/300",
+      });
+      
+      setNewPost("");
+      setNewImage("");
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Erro ao salvar post:", error);
+    }
+  };
 
   const renderItem = ({ item }: any) => (
     <View style={styles.card}>
@@ -61,13 +86,112 @@ export default function Feed() {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
-{/* 
-      <Modal visible={modalVisible} animationType="slide">
-        <PostModal onClose={() => setModalVisible(false)} />
-      </Modal> */}
+
+      {/* MODAL INTEGRADO (Substituindo o PostModal) */}
+      <Modal visible={modalVisible} animationType="slide" transparent={false}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Novo Post</Text>
+
+          <TextInput
+            placeholder="O que você está pensando?"
+            value={newPost}
+            onChangeText={setNewPost}
+            style={styles.input}
+            placeholderTextColor="#888"
+          />
+
+          <TextInput
+            placeholder="URL da imagem (opcional)"
+            value={newImage}
+            onChangeText={setNewImage}
+            style={styles.input}
+            placeholderTextColor="#888"
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleAddPost}>
+            <Text style={styles.buttonText}>Publicar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <Text style={styles.cancel}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }
+
+
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   Image,
+//   TouchableOpacity
+// } from "react-native";
+// import { useState } from "react";
+// import { Ionicons } from "@expo/vector-icons";
+// import { useQuery } from "convex/react";
+// import { api } from "@/convex/_generated/api";
+// import {createHomeStyles} from "@/assets/style/style";
+// import colors from "@/hooks/useTheme";
+
+
+// export default function Feed() {
+//   const posts = useQuery(api.posts.getPosts);
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const styles = createHomeStyles(colors); 
+
+//   const renderItem = ({ item }: any) => (
+//     <View style={styles.card}>
+//       <View style={styles.headerPost}>
+//         <Ionicons name="person-circle" size={32} color="#555" />
+//         <Text style={styles.user}>{item.user}</Text>
+//       </View>
+
+//       <Image source={{ uri: item.image }} style={styles.image} />
+
+//       <View style={styles.actions}>
+//         <Ionicons name="heart-outline" size={22} />
+//         <Ionicons name="chatbubble-outline" size={22} />
+//         <Ionicons name="share-social-outline" size={22} />
+//       </View>
+
+//       <Text style={styles.content}>{item.content}</Text>
+//     </View>
+//   );
+
+//   if (!posts) {
+//     return (
+//       <View style={styles.container}>
+//         <Text>Carregando...</Text>
+//       </View>
+//     );
+//   }
+
+//   return (
+//     <View style={styles.container}>
+//       <View style={styles.topBar}>
+//         <Text style={styles.logo}>MyFeed</Text>
+
+//         <TouchableOpacity onPress={() => setModalVisible(true)}>
+//           <Ionicons name="add-circle" size={30} color="#007AFF" />
+//         </TouchableOpacity>
+//       </View>
+
+//       <FlatList
+//         data={posts}
+//         keyExtractor={(item: any) => item._id}
+//         renderItem={renderItem}
+//         showsVerticalScrollIndicator={false}
+//       />
+
+//       <Modal visible={modalVisible} animationType="slide">
+//         <PostModal onClose={() => setModalVisible(false)} />
+//       </Modal>
+//     </View>
+//   );
+// }
 
 // import {
 //   View,
