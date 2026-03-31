@@ -34,16 +34,16 @@ export default function Profile() {
             <Text style={{ color: '#666' }}>Posts</Text>
           </View>
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>1.2k</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>12m</Text>
             <Text style={{ color: '#666' }}>Seguidores</Text>
           </View>
         </View>
       </View>
 
       <View style={{ marginTop: 15 }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Seu Nome</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>User1245</Text>
         <Text style={{ color: '#444', marginTop: 5 }}>
-          Desenvolvedor Mobile | Apaixonado por React Native e Convex. 🚀
+          Desenvolvedor Mobile | Apaixonado por React Native e Convex.
         </Text>
       </View>
 
@@ -82,7 +82,7 @@ export default function Profile() {
         borderBottomWidth: 0.5,
         borderBottomColor: '#eee'
       }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>seu_usuario</Text>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>usermidia171</Text>
         <Ionicons name="menu-outline" size={28} />
       </View>
 
