@@ -31,7 +31,7 @@ export default function Feed() {
       await createPost({
         user: "Você",
         content: newPost,
-        image: newImage || "https://picsum.photos/500/300",
+        image: newImage
       });
       
       setNewPost("");
